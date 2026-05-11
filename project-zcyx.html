@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZCYX 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-zcyx.html">ZCYX</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>ZCYX</h1>
+      <p>面向项目管理场景的 net5 系统，强调分层边界、权限模型和事件处理机制</p>
+      <span class="pill">net5</span>
+      <span class="pill">MediatR</span>
+      <span class="pill">Expression Query</span>
+      <span class="pill">DI Container</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1400 560" role="img" aria-label="ZCYX 架构拓扑图">
+          <defs>
+            <pattern id="archGridC" width="26" height="26" patternUnits="userSpaceOnUse">
+              <path d="M 26 0 L 0 0 0 26" fill="none" stroke="#2c5f83" stroke-width="0.6" opacity="0.34" />
+            </pattern>
+            <marker id="archArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#73d7ff" />
+            </marker>
+            <marker id="archArrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#6affd9" />
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1400" height="560" fill="url(#archGridC)" />
+          <path class="arch-corner" d="M16 16 L56 16 M16 16 L16 56" />
+          <path class="arch-corner" d="M1384 16 L1344 16 M1384 16 L1384 56" />
+          <rect class="arch-panel" x="30" y="42" width="1340" height="482" />
+
+          <rect class="arch-node arch-node-io" x="64" y="114" rx="10" ry="10" width="305" height="84" />
+          <text class="arch-title" x="217" y="148" text-anchor="middle">Presentation Layer</text>
+          <text class="arch-text" x="217" y="171" text-anchor="middle">ASP.NET Core + Blazor</text>
+
+          <rect class="arch-node arch-node-core" x="430" y="114" rx="10" ry="10" width="335" height="84" />
+          <text class="arch-title" x="597" y="148" text-anchor="middle">Application Services</text>
+          <text class="arch-text" x="597" y="171" text-anchor="middle">Authorize / Location / File Service</text>
+
+          <rect class="arch-node arch-node-biz" x="826" y="114" rx="10" ry="10" width="510" height="84" />
+          <text class="arch-title" x="1081" y="148" text-anchor="middle">Infrastructure Layer</text>
+          <text class="arch-text" x="1081" y="171" text-anchor="middle">Repository + Identity + MediatR Event Handlers</text>
+
+          <rect class="arch-node arch-node-core" x="375" y="310" rx="10" ry="10" width="380" height="84" />
+          <text class="arch-title" x="565" y="344" text-anchor="middle">Expression Authorization</text>
+          <text class="arch-text" x="565" y="367" text-anchor="middle">PredicateBuilder + Permission Filter</text>
+
+          <rect class="arch-node arch-node-infra" x="790" y="310" rx="10" ry="10" width="500" height="84" />
+          <text class="arch-title" x="1040" y="344" text-anchor="middle">Data Persistence</text>
+          <text class="arch-text" x="1040" y="367" text-anchor="middle">ProjectContext / SQL Server / Domain Events</text>
+
+          <path class="arch-line" d="M369 156 L430 156" />
+          <path class="arch-line" d="M765 156 L826 156" />
+          <path class="arch-line" d="M597 198 L565 310" />
+          <path class="arch-line" d="M1081 198 L1040 310" />
+          <path class="arch-line" d="M755 352 L790 352" />
+
+          <path class="arch-flow" d="M217 228 C 305 284, 424 320, 502 346" />
+          <path class="arch-flow" d="M565 392 C 735 458, 930 455, 1040 393" />
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务价</h3>
+          <p class="muted">在项目审批与协作场景中，统一处理权限、通知、流程事件与业务数据</p>
+        </article>
+        <article class="card span-6">
+          <h3>工程亮点</h3>
+          <p class="muted">可组合表达式用于权限过滤，MediatR 事件处理增强业务动作可拓展性</p>
+        </article>
+        <article class="card span-12">
+          <h3>对外展示语义</h3>
+          <p class="muted">该项目代表“现代化 .NET 分层实践 + 事件驱动设计 + 权限边界治理”能力</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
