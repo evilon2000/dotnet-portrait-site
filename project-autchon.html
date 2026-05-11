@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>autchon_backend 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-autchon.html">autchon_backend</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>autchon_backend</h1>
+      <p>聚焦订单、支付、仓储履约的业务后端，采用状态机与异步队列驱动复杂流程</p>
+      <span class="pill">.NET Framework</span>
+      <span class="pill">State Machine</span>
+      <span class="pill">Azure Function</span>
+      <span class="pill">Queue Workflow</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1400 560" role="img" aria-label="autchon_backend 架构拓扑图">
+          <defs>
+            <pattern id="archGridB" width="26" height="26" patternUnits="userSpaceOnUse">
+              <path d="M 26 0 L 0 0 0 26" fill="none" stroke="#2c5f83" stroke-width="0.6" opacity="0.34" />
+            </pattern>
+            <marker id="archArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#73d7ff" />
+            </marker>
+            <marker id="archArrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#6affd9" />
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1400" height="560" fill="url(#archGridB)" />
+          <path class="arch-corner" d="M16 16 L56 16 M16 16 L16 56" />
+          <path class="arch-corner" d="M1384 16 L1344 16 M1384 16 L1384 56" />
+          <rect class="arch-panel" x="30" y="42" width="1340" height="482" />
+
+          <rect class="arch-node arch-node-io" x="70" y="112" rx="10" ry="10" width="300" height="86" />
+          <text class="arch-title" x="220" y="147" text-anchor="middle">Trigger Layer</text>
+          <text class="arch-text" x="220" y="170" text-anchor="middle">HTTP + Queue + Payment Callbacks</text>
+
+          <rect class="arch-node arch-node-core" x="440" y="112" rx="10" ry="10" width="320" height="86" />
+          <text class="arch-title" x="600" y="147" text-anchor="middle">Order State Machine</text>
+          <text class="arch-text" x="600" y="170" text-anchor="middle">OrderState + ChangeHandler</text>
+
+          <rect class="arch-node arch-node-biz" x="840" y="112" rx="10" ry="10" width="490" height="86" />
+          <text class="arch-title" x="1085" y="147" text-anchor="middle">Business Modules</text>
+          <text class="arch-text" x="1085" y="170" text-anchor="middle">AfOrderAndPayment / AfWarehouse / AfProductAndCourier</text>
+
+          <rect class="arch-node arch-node-core" x="365" y="304" rx="10" ry="10" width="360" height="86" />
+          <text class="arch-title" x="545" y="339" text-anchor="middle">Workflow Actions</text>
+          <text class="arch-text" x="545" y="362" text-anchor="middle">Allocate / Cancel / Fulfillment Check</text>
+
+          <rect class="arch-node arch-node-infra" x="790" y="304" rx="10" ry="10" width="470" height="86" />
+          <text class="arch-title" x="1025" y="339" text-anchor="middle">Persistence &amp; Integration</text>
+          <text class="arch-text" x="1025" y="362" text-anchor="middle">SQL + QueueUtil + Logistics / Payment Systems</text>
+
+          <path class="arch-line" d="M370 155 L440 155" />
+          <path class="arch-line" d="M760 155 L840 155" />
+          <path class="arch-line" d="M600 198 L545 304" />
+          <path class="arch-line" d="M1085 198 L1025 304" />
+          <path class="arch-line" d="M725 347 L790 347" />
+
+          <path class="arch-flow" d="M220 232 C 300 280, 380 305, 450 337" />
+          <path class="arch-flow" d="M545 390 C 700 456, 890 448, 1025 390" />
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务价</h3>
+          <p class="muted">在订单履约场景下保持状态一致性，支持支付后流程推进、库存动作与发运联动</p>
+        </article>
+        <article class="card span-6">
+          <h3>工程亮点</h3>
+          <p class="muted">通过状态矩阵明确定义流转规则，结合队列事件实现异步动作解耦与重试空间</p>
+        </article>
+        <article class="card span-12">
+          <h3>对外展示语义</h3>
+          <p class="muted">该项目体现了“高规则密度业务建模 + 事务流程拆分 + 异步系统协同”的后端工程能力</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
