@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alpaca-Link 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-alpaca.html">Alpaca-Link</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Alpaca-Link</h1>
+      <p>面向设备接入的协议服务集群，覆盖 GPRS、MBUS、UDP/TCP 场景与第三方平台推送</p>
+      <span class="pill">TCP/Socket</span>
+      <span class="pill">Protocol State Flow</span>
+      <span class="pill">Gateway Service</span>
+      <span class="pill">Third-party Push</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1400 560" role="img" aria-label="Alpaca-Link 架构拓扑图">
+          <defs>
+            <pattern id="archGridD" width="26" height="26" patternUnits="userSpaceOnUse">
+              <path d="M 26 0 L 0 0 0 26" fill="none" stroke="#2c5f83" stroke-width="0.6" opacity="0.34" />
+            </pattern>
+            <marker id="archArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#73d7ff" />
+            </marker>
+            <marker id="archArrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#6affd9" />
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1400" height="560" fill="url(#archGridD)" />
+          <path class="arch-corner" d="M16 16 L56 16 M16 16 L16 56" />
+          <path class="arch-corner" d="M1384 16 L1344 16 M1384 16 L1384 56" />
+          <rect class="arch-panel" x="30" y="42" width="1340" height="482" />
+
+          <rect class="arch-node arch-node-io" x="64" y="108" rx="10" ry="10" width="330" height="86" />
+          <text class="arch-title" x="229" y="143" text-anchor="middle">Network Entry</text>
+          <text class="arch-text" x="229" y="166" text-anchor="middle">TCP / UDP / Socket Sessions</text>
+
+          <rect class="arch-node arch-node-core" x="442" y="108" rx="10" ry="10" width="320" height="86" />
+          <text class="arch-title" x="602" y="143" text-anchor="middle">Host Runtime</text>
+          <text class="arch-text" x="602" y="166" text-anchor="middle">StandardServer + ServerHost</text>
+
+          <rect class="arch-node arch-node-biz" x="810" y="108" rx="10" ry="10" width="530" height="86" />
+          <text class="arch-title" x="1075" y="143" text-anchor="middle">Protocol Engines</text>
+          <text class="arch-text" x="1075" y="166" text-anchor="middle">GPRS / MBUS / HHU / UDP Uplink</text>
+
+          <rect class="arch-node arch-node-core" x="300" y="308" rx="10" ry="10" width="470" height="86" />
+          <text class="arch-title" x="535" y="343" text-anchor="middle">Session State Flow</text>
+          <text class="arch-text" x="535" y="366" text-anchor="middle">Handshake - Time Sync - Reading - Downlink - Close</text>
+
+          <rect class="arch-node arch-node-infra" x="820" y="308" rx="10" ry="10" width="500" height="86" />
+          <text class="arch-title" x="1070" y="343" text-anchor="middle">Integration &amp; Persistence</text>
+          <text class="arch-text" x="1070" y="366" text-anchor="middle">DataBaseService + Third-party API Push + PushLog</text>
+
+          <path class="arch-line" d="M394 151 L442 151" />
+          <path class="arch-line" d="M762 151 L810 151" />
+          <path class="arch-line" d="M602 194 L535 308" />
+          <path class="arch-line" d="M1075 194 L1070 308" />
+          <path class="arch-line" d="M770 351 L820 351" />
+
+          <path class="arch-flow" d="M229 226 C 320 284, 410 316, 502 344" />
+          <path class="arch-flow" d="M535 393 C 685 450, 900 448, 1070 392" />
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务价</h3>
+          <p class="muted">支持多协议设备接入和报文处理，为上层平台提供标准化数据输出</p>
+        </article>
+        <article class="card span-6">
+          <h3>工程亮点</h3>
+          <p class="muted">主机与协议分层，协议会话按步骤流转，便于后续扩展新协议或新下行策略</p>
+        </article>
+        <article class="card span-12">
+          <h3>对外展示语义</h3>
+          <p class="muted">该项目体现了“网络服务并发处理 + 协议解析建模 + 对外集成闭环”的工程能力</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
