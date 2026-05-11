@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BoveSys.Abp 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-boveiot-abp.html">BoveSys.Abp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>BoveSys.Abp</h1>
+      <p>面向 IoT 平台升级的 ABP 模块化后端，覆盖身份鉴权、规则引擎、后台任务、平台诊断与开放 API</p>
+      <span class="pill">.NET 8</span><span class="pill">ABP</span><span class="pill">MediatR</span><span class="pill">Hangfire</span><span class="pill">codex</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1360 520" role="img" aria-label="BoveSys.Abp 架构拓扑图">
+          <defs>
+            <pattern id="grid1" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M24 0 L0 0 0 24" fill="none" stroke="#2b5b80" stroke-width="0.55" opacity="0.32"/>
+            </pattern>
+            <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#77d9ff"/>
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1360" height="520" fill="url(#grid1)"/>
+          <rect class="arch-panel" x="24" y="24" width="1312" height="472"/>
+
+          <rect class="arch-node arch-node-io" x="70" y="90" rx="10" ry="10" width="300" height="88"/>
+          <text class="arch-title" x="220" y="125" text-anchor="middle">HTTP API Host</text>
+          <text class="arch-text" x="220" y="149" text-anchor="middle">Auth / Swagger / OpenIddict</text>
+
+          <rect class="arch-node arch-node-core" x="420" y="90" rx="10" ry="10" width="300" height="88"/>
+          <text class="arch-title" x="570" y="125" text-anchor="middle">Application Layer</text>
+          <text class="arch-text" x="570" y="149" text-anchor="middle">AppService / MediatR Pipeline</text>
+
+          <rect class="arch-node arch-node-biz" x="770" y="90" rx="10" ry="10" width="520" height="88"/>
+          <text class="arch-title" x="1030" y="125" text-anchor="middle">Domain + Rules Module</text>
+          <text class="arch-text" x="1030" y="149" text-anchor="middle">Workflow Rules / Entity Policy</text>
+
+          <rect class="arch-node arch-node-infra" x="320" y="300" rx="10" ry="10" width="420" height="88"/>
+          <text class="arch-title" x="530" y="335" text-anchor="middle">Infrastructure</text>
+          <text class="arch-text" x="530" y="359" text-anchor="middle">EF Core / SQL Server / Repository</text>
+
+          <rect class="arch-node arch-node-core" x="800" y="300" rx="10" ry="10" width="420" height="88"/>
+          <text class="arch-title" x="1010" y="335" text-anchor="middle">Background Jobs</text>
+          <text class="arch-text" x="1010" y="359" text-anchor="middle">Hangfire / Diagnostics / Scheduler</text>
+
+          <path class="arch-line" d="M370 134 L420 134" marker-end="url(#arr1)"/>
+          <path class="arch-line" d="M720 134 L770 134" marker-end="url(#arr1)"/>
+          <path class="arch-line" d="M570 178 L530 300" marker-end="url(#arr1)"/>
+          <path class="arch-line" d="M1030 178 L1010 300" marker-end="url(#arr1)"/>
+          <path class="arch-line" d="M740 344 L800 344" marker-end="url(#arr1)"/>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务内容</h3>
+          <p class="muted">支撑设备接入、站点管理、规则校验与任务调度，作为 IoT 平台核心中台，服务上层业务应用与运维平台</p>
+        </article>
+        <article class="card span-6">
+          <h3>技术亮点</h3>
+          <p class="muted">ABP 模块化分层、MediatR 管道行为、规则引擎服务化、后台任务统一调度与权限控制</p>
+          <span class="pill">DDD</span><span class="pill">RulesEngine</span><span class="pill">OpenIddict</span><span class="pill">codex</span>
+        </article>
+        <article class="card span-12">
+          <h3>完整代码示例：RuleWorkflowAppService.EvaluateAsync</h3>
+<pre><code>public async Task&lt;RuleWorkflowEvaluationResultDto&gt; EvaluateAsync(RuleWorkflowEvaluationRequestDto input)
+{
+    if (string.IsNullOrWhiteSpace(input.WorkflowName))
+    {
+        throw new ArgumentException("WorkflowName is required.", nameof(input));
+    }
+
+    if (input.Rules.Count == 0)
+    {
+        throw new ArgumentException("At least one rule is required.", nameof(input));
+    }
+
+    var workflow = new Workflow
+    {
+        WorkflowName = input.WorkflowName,
+        Rules = input.Rules.Select(MapRule).ToArray()
+    };
+
+    var rulesEngine = new RulesEngine.RulesEngine(new[] { workflow });
+    var parameters = input.Inputs
+        .Select(item =&gt; new RuleParameter(item.Key, NormalizeInput(item.Value)!))
+        .ToArray();
+
+    var executionResults = await rulesEngine.ExecuteAllRulesAsync(input.WorkflowName, parameters);
+
+    return new RuleWorkflowEvaluationResultDto
+    {
+        WorkflowName = input.WorkflowName,
+        IsSuccess = executionResults.All(result =&gt; result.IsSuccess),
+        EvaluatedAt = DateTimeOffset.UtcNow,
+        Results = executionResults
+            .Select(result =&gt; new RuleExecutionResultDto
+            {
+                RuleName = result.Rule.RuleName,
+                IsSuccess = result.IsSuccess,
+                ErrorMessage = result.Rule.ErrorMessage,
+                ExceptionMessage = result.ExceptionMessage,
+                SuccessEvent = result.Rule.SuccessEvent
+            })
+            .ToList()
+    };
+}</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
