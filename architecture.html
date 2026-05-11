@@ -20,8 +20,8 @@
 
   <main class="container">
     <section class="hero">
-      <h1>项目业务、技术亮点与完整代码展示</h1>
-      <p>从业务场景、技术亮点和关键代码三个角度展示项目能力，帮助读者快速理解每个项目解决了什么问题，以及代码如何落地。</p>
+      <h1>项目业务、技术实现与关键代码</h1>
+      <p>这里按项目整理业务内容、实现方式和关键代码片段，方便直接看每个项目处理了什么问题。</p>
       <div class="hero-tools">
         <button class="code-btn" id="show-key-btn">仅看关键代码</button>
         <button class="code-btn" id="show-all-btn">展开全部代码</button>
@@ -29,30 +29,30 @@
     </section>
 
     <section class="card">
-      <h2>AI 协作项目筛选结论</h2>
+      <h2>AI 协作项目</h2>
       <div class="grid">
         <article class="card span-6 project-card">
           <h3>BoveSys.Abp｜模块化 IoT 平台实践</h3>
-          <p class="muted">ABP 模块化 IoT 平台，工程层次完整，适合作为主展示项目</p>
-          <span class="pill">.NET 8</span><span class="pill">ABP</span><span class="pill">codex</span>
+          <p class="muted">包含权限、规则引擎、后台任务和开放 API，适合放在重点项目里展示</p>
+          <span class="pill">.NET 8</span><span class="pill">ABP</span>
           <a href="./project-boveiot-abp.html">查看项目</a>
         </article>
         <article class="card span-6 project-card">
           <h3>Ultrasonic MES｜超声表产线 MES 后端</h3>
-          <p class="muted">制造场景业务闭环清晰，规则约束与接口边界表达明确</p>
-          <span class="pill">Clean Architecture</span><span class="pill">EF Core</span><span class="pill">codex</span>
+          <p class="muted">覆盖工单、SN 追溯、测试结果和防错规则，业务流程比较完整</p>
+          <span class="pill">Clean Architecture</span><span class="pill">EF Core</span>
           <a href="./project-ultrasonic-mes.html">查看项目</a>
         </article>
         <article class="card span-6 project-card">
           <h3>Modbus 工业仿真套件｜现场联调与协议诊断工具</h3>
-          <p class="muted">工业通信与仿真链路完整，现场联调与排障价值高</p>
-          <span class="pill">WPF</span><span class="pill">NModbus</span><span class="pill">codex</span>
+          <p class="muted">支持 Modbus 主站采集、PLC/机器人仿真，适合说明现场联调和协议排查经验</p>
+          <span class="pill">WPF</span><span class="pill">NModbus</span>
           <a href="./project-modbus-suite.html">查看项目</a>
         </article>
         <article class="card span-6 project-card">
           <h3>WeChat Persona Agent｜AI 用户画像系统</h3>
-          <p class="muted">跨栈 AI 产品化工程，作为补充展示你的 AI 系统落地能力</p>
-          <span class="pill">FastAPI</span><span class="pill">LLM Workflow</span><span class="pill">codex</span>
+          <p class="muted">一个从 API、提示词管理到模型调用封装的 AI 应用后端案例</p>
+          <span class="pill">FastAPI</span><span class="pill">LLM Workflow</span>
           <a href="./project-wechat-persona-ai.html">查看项目</a>
         </article>
       </div>
@@ -62,7 +62,7 @@
       <h2>BoveSysApi</h2>
       <ul class="meta-list">
         <li><strong>具体业务内容</strong>面向智能水务/仪表场景的 IoT 平台后端，覆盖设备主数据管理、抄表原始报文入库、按日/月/设备维度的用量统计、租户权限下的数据可见性控制，以及定时任务驱动的增量处理与对外 API 输出</li>
-        <li><strong>技术亮点：</strong>泛型仓储统一数据访问入口，服务层沉淀统计聚合逻辑，兼顾扩展性与一致性<br>
+        <li><strong>技术亮点：</strong>使用泛型仓储处理常见查询和分页，统计逻辑放在服务层，减少控制器里的重复代码<br>
           <span class="pill">ASP.NET Core</span><span class="pill">EF Core</span><span class="pill">Repository Pattern</span><span class="pill">Expression Query</span><span class="pill">Scheduled Task</span></li>
       </ul>
 
@@ -170,7 +170,7 @@
       <h2>autchon_backend</h2>
       <ul class="meta-list">
         <li><strong>具体业务内容</strong>跨订单、支付、库存、仓配、物流的履约后端，负责订单全生命周期编排，包括支付后库存占用、仓库分配、箱单处理、发运检查、异常回滚与取消流程</li>
-        <li><strong>技术亮点：</strong>状态机矩阵定义业务状态，结合队列触发实现异步执行和链路解耦<br>
+        <li><strong>技术亮点：</strong>用状态矩阵描述订单状态变化，用队列触发库存、发货和完成检查等异步任务<br>
           <span class="pill">State Machine</span><span class="pill">Workflow Orchestration</span><span class="pill">Azure Queue</span><span class="pill">Function Trigger</span><span class="pill">Transaction Boundary</span></li>
       </ul>
 
@@ -363,7 +363,7 @@ public static void Run([QueueTrigger("%CheckOrderFinish%", Connection = "AzureWe
       <h2>Alpaca-Link</h2>
       <ul class="meta-list">
         <li><strong>具体业务内容</strong>物联网设备接入中间层，负责多协议终端会话管理、上行解析、下行投递、第三方接口推送与通信日志追踪</li>
-        <li><strong>技术亮点：</strong>基于会话步骤流组织协议处理逻辑，协议层与主机层解耦<br>
+        <li><strong>技术亮点：</strong>按设备会话的不同阶段处理握手、读数、下行指令和关闭连接，协议解析代码与服务启动代码分开维护<br>
           <span class="pill">TCP/Socket</span><span class="pill">Protocol Engine</span><span class="pill">Gateway Service</span><span class="pill">Async Processing</span><span class="pill">Third-party Integration</span></li>
       </ul>
 
@@ -465,7 +465,7 @@ public static void Run([QueueTrigger("%CheckOrderFinish%", Connection = "AzureWe
       <h2>BoveMES</h2>
       <ul class="meta-list">
         <li><strong>具体业务内容</strong>产线质检桌面工具，负责批量指令下发、串口采集、设备标识解析、测试规则校验、结果入库与追溯报表输出</li>
-        <li><strong>技术亮点：</strong>HandlerProvider + ResolverFactory + VerifyFactory 形成协议执行与校验闭环<br>
+        <li><strong>技术亮点：</strong>把指令发送、返回解析和结果校验拆成三个步骤，便于为不同设备协议增加处理逻辑<br>
           <span class="pill">Windows Forms</span><span class="pill">Strategy Pattern</span><span class="pill">Factory Pattern</span><span class="pill">Serial Port I/O</span><span class="pill">QC Traceability</span></li>
       </ul>
 
@@ -575,7 +575,7 @@ public static void Run([QueueTrigger("%CheckOrderFinish%", Connection = "AzureWe
       <h2>CityBound</h2>
       <ul class="meta-list">
         <li><strong>具体业务内容</strong>地信确权与边界成果系统，覆盖项目创建、边界点位处理、地物关系识别、成果核验、文档输出与过程数据追溯</li>
-        <li><strong>技术亮点：</strong>将 WinForms 业务流程、GIS 计算工具链和 EF6 数据层分离，通用仓储 + 领域服务支撑可复用作业流水线<br>
+        <li><strong>技术亮点：</strong>把界面流程、GIS 计算和数据库访问分开处理，让边界数据处理、成果校验和文档输出可以复用<br>
           <span class="pill">WinForms</span><span class="pill">GIS Toolchain</span><span class="pill">EF6</span><span class="pill">Repository Pattern</span><span class="pill">Strategy Context</span></li>
       </ul>
 

@@ -22,7 +22,7 @@
   <main class="container">
     <section class="hero">
       <h1>autchon_backend</h1>
-      <p>聚焦订单、支付、仓储履约的业务后端，采用状态机与异步队列驱动复杂流程</p>
+      <p>订单履约后端，处理支付后库存占用、仓库分配、发货检查和取消回滚</p>
       <span class="pill">.NET Framework</span>
       <span class="pill">State Machine</span>
       <span class="pill">Azure Function</span>
@@ -95,12 +95,12 @@
             <li>状态流转前置规则校验防止越权跳转</li>
             <li>事件总线驱动异步通知与后置动作</li>
             <li>关键接口提供重试与幂等保护</li>
-            <li>支持履约链路的对账与追踪查询</li>
+            <li>支持订单履约过程的对账与追踪查询</li>
           </ol>
         </article>
         <article class="card span-12">
           <h3>技术亮点</h3>
-          <p class="muted">该项目体现了“高规则密度业务建模 + 事务流程拆分 + 异步系统协同”的后端工程能力</p>
+          <p class="muted">这个项目重点处理订单从支付、分仓、发货到完成的状态流转，并用队列执行异步任务。</p>
         </article>
       </div>
     </section>

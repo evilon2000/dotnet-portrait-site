@@ -22,8 +22,8 @@
   <main class="container">
     <section class="hero">
       <h1>WeChat Persona Agent Blueprint</h1>
-      <p>AI 画像产品化工程，包含后端 API、Prompt 资产、模型接入与多端协作路径，作为跨栈能力补充展示</p>
-      <span class="pill">FastAPI</span><span class="pill">提示词管理</span><span class="pill">LLM Gateway</span><span class="pill">codex</span>
+      <p>一个 AI 用户画像系统，包含后端 API、提示词管理、模型调用和 Web/移动端接入。</p>
+      <span class="pill">FastAPI</span><span class="pill">提示词管理</span><span class="pill">LLM Gateway</span>
     </section>
 
     <section>
@@ -48,7 +48,7 @@
           <text class="arch-text" x="590" y="148" text-anchor="middle">Router / Service / Schema</text>
           <rect class="arch-node arch-node-biz" x="800" y="90" rx="10" ry="10" width="440" height="86"/>
           <text class="arch-title" x="1020" y="124" text-anchor="middle">LLM &amp; Prompt Layer</text>
-          <text class="arch-text" x="1020" y="148" text-anchor="middle">Bailian Client / Prompt Assets</text>
+          <text class="arch-text" x="1020" y="148" text-anchor="middle">Bailian Client / Prompt Templates</text>
           <rect class="arch-node arch-node-infra" x="320" y="290" rx="10" ry="10" width="360" height="86"/>
           <text class="arch-title" x="500" y="324" text-anchor="middle">Data Layer</text>
           <text class="arch-text" x="500" y="348" text-anchor="middle">PostgreSQL + pgvector / Redis</text>
@@ -69,13 +69,13 @@
       <div class="grid">
         <article class="card span-6">
           <h3>业务场景</h3>
-          <p class="muted">基于用户输入与历史素材构建“画像解释—洞察问答—内容生成”链路，服务内容创作和个性化输出场景</p>
+          <p class="muted">根据用户输入和历史素材生成画像说明，支持围绕画像问答，并生成可用于内容创作的文本。</p>
         </article>
         <article class="card span-6">
           <h3>项目细节（节选）</h3>
           <ol class="muted">
             <li>提示词模板支持版本化管理与回滚</li>
-            <li>模型网关统一路由与参数治理</li>
+            <li>模型调用统一封装请求参数和返回结果</li>
             <li>JSON 输出含结构校验与降级兜底</li>
             <li>会话上下文支持截断与摘要策略</li>
             <li>运行日志包含脱敏与错误类型映射</li>
@@ -83,8 +83,8 @@
         </article>
         <article class="card span-6">
           <h3>技术亮点</h3>
-          <p class="muted">模型网关封装、错误类型标准化、JSON 输出约束与 Prompt 资产化，提升线上可维护性</p>
-          <span class="pill">LLM Gateway</span><span class="pill">Prompt Assets</span><span class="pill">Error Handling</span><span class="pill">codex</span>
+          <p class="muted">把模型调用、错误处理和 JSON 返回格式封装成统一接口，方便前端稳定使用。</p>
+          <span class="pill">LLM Gateway</span><span class="pill">提示词管理</span><span class="pill">Error Handling</span>
         </article>
         <article class="card span-12">
           <h3>完整代码示例：BailianClient.chat_json</h3>
