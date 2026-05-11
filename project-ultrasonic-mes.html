@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ultrasonic MES 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-ultrasonic-mes.html">Ultrasonic MES</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Ultrasonic MES</h1>
+      <p>超声表产线 MES 后端，围绕工单、SN 追溯、测试结果与不良码，形成可追踪的过程质量闭环</p>
+      <span class="pill">.NET 8</span><span class="pill">Clean Architecture</span><span class="pill">EF Core</span><span class="pill">codex</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1320 500" role="img" aria-label="Ultrasonic MES 架构拓扑图">
+          <defs>
+            <pattern id="grid2" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M24 0 L0 0 0 24" fill="none" stroke="#2b5b80" stroke-width="0.55" opacity="0.32"/>
+            </pattern>
+            <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#77d9ff"/>
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1320" height="500" fill="url(#grid2)"/>
+          <rect class="arch-panel" x="24" y="24" width="1272" height="452"/>
+          <rect class="arch-node arch-node-io" x="80" y="90" rx="10" ry="10" width="280" height="86"/>
+          <text class="arch-title" x="220" y="124" text-anchor="middle">API Controllers</text>
+          <text class="arch-text" x="220" y="148" text-anchor="middle">WorkOrder / SnTrace / TestResult</text>
+          <rect class="arch-node arch-node-core" x="410" y="90" rx="10" ry="10" width="300" height="86"/>
+          <text class="arch-title" x="560" y="124" text-anchor="middle">Application Services</text>
+          <text class="arch-text" x="560" y="148" text-anchor="middle">UseCase + Rule Check</text>
+          <rect class="arch-node arch-node-biz" x="760" y="90" rx="10" ry="10" width="480" height="86"/>
+          <text class="arch-title" x="1000" y="124" text-anchor="middle">Domain Layer</text>
+          <text class="arch-text" x="1000" y="148" text-anchor="middle">Entity / Enum / Process Rule</text>
+          <rect class="arch-node arch-node-infra" x="320" y="290" rx="10" ry="10" width="360" height="86"/>
+          <text class="arch-title" x="500" y="324" text-anchor="middle">Infrastructure</text>
+          <text class="arch-text" x="500" y="348" text-anchor="middle">Repository + DbContext</text>
+          <rect class="arch-node arch-node-core" x="760" y="290" rx="10" ry="10" width="430" height="86"/>
+          <text class="arch-title" x="975" y="324" text-anchor="middle">Persistence</text>
+          <text class="arch-text" x="975" y="348" text-anchor="middle">SQLite / Seed / Health</text>
+          <path class="arch-line" d="M360 132 L410 132" marker-end="url(#arr2)"/>
+          <path class="arch-line" d="M710 132 L760 132" marker-end="url(#arr2)"/>
+          <path class="arch-line" d="M560 176 L500 290" marker-end="url(#arr2)"/>
+          <path class="arch-line" d="M1000 176 L975 290" marker-end="url(#arr2)"/>
+          <path class="arch-line" d="M680 334 L760 334" marker-end="url(#arr2)"/>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务内容</h3>
+          <p class="muted">实现产线工单下发、过站追溯、测试结果采集、防错规则校验，保障生产过程可控和异常可追溯</p>
+        </article>
+        <article class="card span-6">
+          <h3>技术亮点</h3>
+          <p class="muted">分层边界清晰、实体约束明确，应用层围绕用例组织，规则集中管理，便于持续扩展与维护</p>
+          <span class="pill">Clean Architecture</span><span class="pill">Rule Guard</span><span class="pill">SQLite</span><span class="pill">codex</span>
+        </article>
+        <article class="card span-12">
+          <h3>完整代码示例：WorkOrderService</h3>
+<pre><code>public sealed class WorkOrderService : IWorkOrderService
+{
+    private readonly IWorkOrderRepository _workOrderRepository;
+
+    public WorkOrderService(IWorkOrderRepository workOrderRepository)
+    {
+        _workOrderRepository = workOrderRepository;
+    }
+
+    public async Task&lt;WorkOrderDto&gt; UpsertAsync(UpsertWorkOrderCommand command, CancellationToken cancellationToken = default)
+    {
+        var entity = new WorkOrder
+        {
+            WorkOrderNo = command.WorkOrderNo.Trim().ToUpperInvariant(),
+            SkuCode = command.SkuCode.Trim().ToUpperInvariant(),
+            RegionCode = command.RegionCode.Trim().ToUpperInvariant(),
+            RequiredFirmwareVersion = string.IsNullOrWhiteSpace(command.RequiredFirmwareVersion) ? null : command.RequiredFirmwareVersion.Trim(),
+            PlannedQuantity = command.PlannedQuantity,
+            Status = command.Status,
+            UpdatedAt = DateTimeOffset.UtcNow
+        };
+
+        await _workOrderRepository.UpsertAsync(entity, cancellationToken);
+        return ToDto(entity);
+    }
+
+    public async Task&lt;WorkOrderDto?&gt; GetByNoAsync(string workOrderNo, CancellationToken cancellationToken = default)
+    {
+        var entity = await _workOrderRepository.GetByNoAsync(workOrderNo.Trim(), cancellationToken);
+        return entity is null ? null : ToDto(entity);
+    }
+}</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
