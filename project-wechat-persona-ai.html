@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wechat Persona Agent 项目</title>
+  <title>WeChat Persona Agent 项目</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -21,9 +21,9 @@
 
   <main class="container">
     <section class="hero">
-      <h1>Wechat Persona Agent Blueprint</h1>
+      <h1>WeChat Persona Agent Blueprint</h1>
       <p>AI 画像产品化工程，包含后端 API、Prompt 资产、模型接入与多端协作路径，作为跨栈能力补充展示</p>
-      <span class="pill">FastAPI</span><span class="pill">PromptOps</span><span class="pill">LLM Gateway</span><span class="pill">codex</span>
+      <span class="pill">FastAPI</span><span class="pill">提示词管理</span><span class="pill">LLM Gateway</span><span class="pill">codex</span>
     </section>
 
     <section>
@@ -53,7 +53,7 @@
           <text class="arch-title" x="500" y="324" text-anchor="middle">Data Layer</text>
           <text class="arch-text" x="500" y="348" text-anchor="middle">PostgreSQL + pgvector / Redis</text>
           <rect class="arch-node arch-node-core" x="760" y="290" rx="10" ry="10" width="460" height="86"/>
-          <text class="arch-title" x="990" y="324" text-anchor="middle">Runtime Governance</text>
+          <text class="arch-title" x="990" y="324" text-anchor="middle">运行时稳定性</text>
           <text class="arch-text" x="990" y="348" text-anchor="middle">Timeout / Error Mapping / Health</text>
           <path class="arch-line" d="M380 132 L430 132" marker-end="url(#arr4)"/>
           <path class="arch-line" d="M750 132 L800 132" marker-end="url(#arr4)"/>
@@ -68,8 +68,12 @@
       <h2>项目介绍</h2>
       <div class="grid">
         <article class="card span-6">
-          <h3>业务内容</h3>
+          <h3>业务场景</h3>
           <p class="muted">基于用户输入与历史素材构建“画像解释—洞察问答—内容生成”链路，服务内容创作和个性化输出场景</p>
+        </article>
+        <article class="card span-6">
+          <h3>我负责实现的内容</h3>
+          <p class="muted">负责 LLM 网关封装、Prompt 模板管理与 JSON 结构化返回校验，确保业务侧能够稳定接入并复用多类生成能力</p>
         </article>
         <article class="card span-6">
           <h3>技术亮点</h3>
@@ -102,6 +106,8 @@
   </main>
 </body>
 </html>
+
+
 
 
 
