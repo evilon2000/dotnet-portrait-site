@@ -1,0 +1,744 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>项目业务与代码亮点</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a class="active" href="./architecture.html">项目业务与代码亮点</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>项目业务、技术亮点与完整代码展示</h1>
+      <p>本页聚焦可展示内容：每个项目给出业务价值、技术亮点（含标签）以及完整方法/类代码。代码块支持独立缩放</p>
+      <div class="hero-tools">
+        <button class="code-btn" id="show-key-btn">仅看关键代码</button>
+        <button class="code-btn" id="show-all-btn">展开全部代码</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>G:\CODEX 筛选结论（AI辅助编程项目）</h2>
+      <div class="grid">
+        <article class="card span-6 project-card">
+          <h3>BoveSys.Abp</h3>
+          <p class="muted">ABP 模块化 IoT 平台，工程层次完整，适合作为主展示项目</p>
+          <span class="pill">.NET 8</span><span class="pill">ABP</span><span class="pill">codex</span>
+          <a href="./project-boveiot-abp.html">查看项目</a>
+        </article>
+        <article class="card span-6 project-card">
+          <h3>Ultrasonic MES</h3>
+          <p class="muted">制造场景业务闭环清晰，规则约束与接口边界表达明确</p>
+          <span class="pill">Clean Architecture</span><span class="pill">EF Core</span><span class="pill">codex</span>
+          <a href="./project-ultrasonic-mes.html">查看项目</a>
+        </article>
+        <article class="card span-6 project-card">
+          <h3>Modbus 工业仿真套件</h3>
+          <p class="muted">工业通信与仿真链路完整，现场联调与排障价值高</p>
+          <span class="pill">WPF</span><span class="pill">NModbus</span><span class="pill">codex</span>
+          <a href="./project-modbus-suite.html">查看项目</a>
+        </article>
+        <article class="card span-6 project-card">
+          <h3>Wechat Persona Agent</h3>
+          <p class="muted">跨栈 AI 产品化工程，作为补充展示你的 AI 系统落地能力</p>
+          <span class="pill">FastAPI</span><span class="pill">LLM Workflow</span><span class="pill">codex</span>
+          <a href="./project-wechat-persona-ai.html">查看项目</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="project-showcase card">
+      <h2>BoveSysApi</h2>
+      <ul class="meta-list">
+        <li><strong>具体业务内容</strong>面向智能水务/仪表场景的 IoT 平台后端，覆盖设备主数据管理、抄表原始报文入库、按日/月/设备维度的用量统计、租户权限下的数据可见性控制，以及定时任务驱动的增量处理与对外 API 输出</li>
+        <li><strong>技术亮点：</strong>泛型仓储统一数据访问入口，服务层沉淀统计聚合逻辑，兼顾扩展性与一致性<br>
+          <span class="pill">ASP.NET Core</span><span class="pill">EF Core</span><span class="pill">Repository Pattern</span><span class="pill">Expression Query</span><span class="pill">Scheduled Task</span></li>
+      </ul>
+
+      <div class="code-block" data-scale="1">
+        <div class="code-head">
+          <span>完整方法：GenericRepository.GetAllDataPaging(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public GridData&lt;TType&gt; GetAllDataPaging(int skip, int pageSize, Expression&lt;Func&lt;TType, object&gt;&gt; keySelector,string diretion, params Expression&lt;Func&lt;TType, object&gt;&gt;[] children)
+{
+    List&lt;TType&gt; list;
+    var query = dbset.AsNoTracking().AsQueryable();
+    foreach (Expression&lt;Func&lt;TType, object&gt;&gt; include in children)
+        query = query.Include(include);
+    var count = query.Count();
+    if (diretion == "down")
+    {
+        list = query.OrderByDescending(keySelector).Skip(skip).Take(pageSize).ToList&lt;TType&gt;();
+    }
+    else
+    {
+        list = query.OrderBy(keySelector).Skip(skip).Take(pageSize).ToList&lt;TType&gt;();
+    }
+    return new GridData&lt;TType&gt;
+    {
+        TotalCount = count,
+        Items = list
+    };
+}</code></pre>
+      </div>
+      </div>
+
+      <div class="code-block" data-scale="1" data-level="secondary">
+        <div class="code-head">
+          <span>完整方法：MessageTypeService.GetDailyUsageReadingByDeviceId(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public async Task&lt;List&lt;UsageReadingByDay&gt;&gt; GetDailyUsageReadingByDeviceId(usageReading usageReading)
+{
+    List&lt;UsageReadingByDay&gt; list = new List&lt;UsageReadingByDay&gt;();
+    if (usageReading.meter != null)
+    {
+        if (usageReading.fromDate != null &amp;&amp; usageReading.toDate != null)
+        {
+            var meter = await watermeterUsageDailyRepository.GetAllWithEntities(x =&gt; x.device_id == usageReading.meter &amp;&amp; (x.usage_date.Date &gt;= usageReading.fromDate.Value.Date &amp;&amp; x.usage_date.Date &lt;= usageReading.toDate.Value.Date))
+                .OrderByDescending(y =&gt; y.usage_date.Date)
+                .GroupBy(z =&gt; z.usage_date.Date)
+                .Select(x =&gt; new
+                {
+                    date = x.Key,
+                    sum = x.Sum(y =&gt; y.water_usage)
+                }).ToListAsync();
+
+            list = meter.OrderBy(x =&gt; x.date)
+                .Select(x =&gt; new UsageReadingByDay
+                {
+                    date = x.date.ToString("dd MMM yyyy"),
+                    sum = x.sum
+                })
+                .ToList();
+        }
+        else
+        {
+            var meter = await watermeterUsageDailyRepository.GetAllWithEntities(x =&gt; x.device_id == usageReading.meter)
+                .OrderByDescending(y =&gt; y.usage_date.Date)
+                .GroupBy(z =&gt; z.usage_date.Date).Select(x =&gt; new
+            {
+                date = x.Key,
+                sum = x.Sum(y =&gt; y.water_usage)
+            }).ToListAsync();
+            list = meter.OrderByDescending(t =&gt; t.date)
+                .Take(7)
+                .OrderBy(x =&gt; x.date)
+                .Select(x =&gt; new UsageReadingByDay
+                {
+                    date = x.date.ToString("dd MMM yyyy"),
+                    sum = x.sum
+                })
+                .ToList();
+        }
+        return list;
+    }
+    return null;
+}</code></pre>
+      </div>
+      </div>
+      <p class="jump-link"><a href="./project-bovesysapi.html">查看该项目拓扑页</a></p>
+    </section>
+
+    <section class="project-showcase card">
+      <h2>autchon_backend</h2>
+      <ul class="meta-list">
+        <li><strong>具体业务内容</strong>跨订单、支付、库存、仓配、物流的履约后端，负责订单全生命周期编排，包括支付后库存占用、仓库分配、箱单处理、发运检查、异常回滚与取消流程</li>
+        <li><strong>技术亮点：</strong>状态机矩阵定义业务状态，结合队列触发实现异步执行和链路解耦<br>
+          <span class="pill">State Machine</span><span class="pill">Workflow Orchestration</span><span class="pill">Azure Queue</span><span class="pill">Function Trigger</span><span class="pill">Transaction Boundary</span></li>
+      </ul>
+
+      <div class="code-block" data-scale="1">
+        <div class="code-head">
+          <span>完整类：WarehouseOrderState</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public abstract class WarehouseOrderState : OrderState
+{
+    public WarehouseOrderState(OrderChangeHandler handler)
+       : base(handler)
+    {
+        stateMachine.Add(StateType.InitState, new int[] { 100, 100, 0, 0 });
+        stateMachine.Add(StateType.AllocatePart, new int[] { 100, 100, 2, 0 });
+        stateMachine.Add(StateType.AllocateAll, new int[] { 100, 100, 1, 0 });
+        stateMachine.Add(StateType.AllocateAllShippedPart, new int[] { 100, 100, 1, 2 });
+        stateMachine.Add(StateType.AllocateAllShippedAll, new int[] { 100, 100, 1, 1 });
+        stateMachine.Add(StateType.AllocatePartShippedPart, new int[] { 100, 100, 2, 2 });
+        stateMachine.Add(StateType.Cancel, new int[] { 100, 0, 3, 3 });
+        stateMachine.Add(StateType.SignedForFinsh, new int[] { 100, 3, 3, 3 });
+        stateMachine.Add(StateType.Finish, new int[] { 100, 1, 1, 1 });
+    }
+    protected override void NotifyWarehouseHandleOrder(OrderChangeHandler handler, string queueName,bool isPayed)
+    {
+        WarehouseOrderChangeHandler commonHandler = (WarehouseOrderChangeHandler)handler;
+        try
+        {
+            var OrderForSave = commonHandler.orderForSave;
+            AllocateInfo allocateInfo = new AllocateInfo
+            {
+                isPayed = isPayed,
+                orderId = OrderForSave.order.order_id,
+                userId = OrderForSave.order.entity_id,
+                warehouseId = OrderForSave.warehouseId,
+                queueName = queueName
+            };
+            OnProgress(allocateInfo);
+        }
+        catch
+        {
+        }
+    }
+    protected override void OnProgress(AllocateInfo allocate)
+    {
+        base.OnProgress(allocate);
+    }
+}</code></pre>
+      </div>
+      </div>
+
+      <div class="code-block" data-scale="1" data-level="secondary">
+        <div class="code-head">
+          <span>完整方法：FuncOdFulfillmentCheck.Run(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>[FunctionName("FuncOdFulfillmentCheck")]
+public static void Run([QueueTrigger("%CheckOrderFinish%", Connection = "AzureWebJobsStorage")]string myQueueItem, TraceWriter log)
+{
+    OrderForSave orderForSave = JsonConvert.DeserializeObject&lt;OrderForSave&gt;(myQueueItem);
+    int[] statesNow = orderForSave.states;
+    if (statesNow == null)
+        return;
+    if (Enumerable.SequenceEqual(statesNow, new int[] { 1, 100, 1, 1 })
+        || Enumerable.SequenceEqual(statesNow, new int[] { 1,100,100,100})
+        || Enumerable.SequenceEqual(statesNow,new int[] { 100, 100, 1, 1 }))
+    {
+        var updateOrder = new order
+        {
+            order_id = orderForSave.order.order_id,
+            od_status_management = 1,
+            od_complete_date = OrderService.GetDbSysTime()
+        };
+        OrderService.UpdateOrderFiledIfChanged(updateOrder);
+    }
+}</code></pre>
+      </div>
+      </div>
+      <p class="jump-link"><a href="./project-autchon.html">查看该项目拓扑页</a></p>
+    </section>
+
+    <section class="project-showcase card">
+      <h2>ZCYX</h2>
+      <ul class="meta-list">
+        <li><strong>具体业务内容</strong>企业项目管理与协作平台，覆盖项目立项、成员角色授权、审批流转、待办处理、通知与文件服务</li>
+        <li><strong>技术亮点：</strong>可组合表达式实现权限边界，事件处理机制承载跨模块动作<br>
+          <span class="pill">net5</span><span class="pill">MediatR</span><span class="pill">Event-Driven</span><span class="pill">Expression Builder</span><span class="pill">Layered Architecture</span></li>
+      </ul>
+
+      <div class="code-block" data-scale="1">
+        <div class="code-head">
+          <span>完整类：PredicateBuilder</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public static class PredicateBuilder
+{
+    public static Expression&lt;Func&lt;T, bool&gt;&gt; True&lt;T&gt;() { return f =&gt; true; }
+
+    public static Expression&lt;Func&lt;T, bool&gt;&gt; False&lt;T&gt;() { return f =&gt; false; }
+
+    public static Expression&lt;Func&lt;T, bool&gt;&gt; Or&lt;T&gt;(this Expression&lt;Func&lt;T, bool&gt;&gt; exp, Expression&lt;Func&lt;T, bool&gt;&gt; condition)
+    {
+        var inv = Expression.Invoke(condition, exp.Parameters.Cast&lt;Expression&gt;());
+        return Expression.Lambda&lt;Func&lt;T, bool&gt;&gt;(Expression.Or(exp.Body, inv), exp.Parameters);
+    }
+
+    public static Expression&lt;Func&lt;T, bool&gt;&gt; And&lt;T&gt;(this Expression&lt;Func&lt;T, bool&gt;&gt; exp, Expression&lt;Func&lt;T, bool&gt;&gt; condition)
+    {
+        var inv = Expression.Invoke(condition, exp.Parameters.Cast&lt;Expression&gt;());
+        return Expression.Lambda&lt;Func&lt;T, bool&gt;&gt;(Expression.And(exp.Body, inv), exp.Parameters);
+    }
+}</code></pre>
+      </div>
+      </div>
+
+      <div class="code-block" data-scale="1" data-level="secondary">
+        <div class="code-head">
+          <span>完整类：RequestCommitEventHandler</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public class RequestCommitEventHandler : INotificationHandler&lt;RequestCommitEvent&gt;
+{
+    private ProjectContext _projectContext;
+    private readonly IMemoryCache _cache;
+    public RequestCommitEventHandler(ProjectContext projectContext,IMemoryCache memoryCache)
+    {
+        _projectContext = projectContext;
+        _cache = memoryCache;
+    }
+    public Task Handle(RequestCommitEvent notification, CancellationToken cancellationToken)
+    {
+        var notify = new Notify
+        {
+            From = notification.BaseRequest.GetType().Name,
+            Message = $"{notification.BaseRequest.Applicant.Name}申请成为合作伙伴"
+        };
+        _projectContext.Notifies.Add(notify);
+        _projectContext.SaveChanges();
+
+        var admins = _projectContext.Users
+            .Include(x =&gt; x.UserRoles)
+            .ThenInclude(x =&gt; x.Role)
+            .Where(x =&gt; x.UserRoles.Any(y =&gt; y.Role.Name == Roles.SuperAdmin))
+            .Select(x =&gt; x.Id);
+
+        return admins.ForEachAsync(async x =&gt;
+        {
+            if(_cache.TryGetValue(x,out WebSocket webSocket) &amp;&amp; webSocket.State == WebSocketState.Open)
+            {
+                var bytes = Encoding.UTF8.GetBytes($"您有一条来自{notification.BaseRequest.Applicant.Name}的审批，等待处理");
+                await webSocket.SendAsync(bytes,WebSocketMessageType.Text,true,default);
+            }
+        });
+    }
+}</code></pre>
+      </div>
+      </div>
+      <p class="jump-link"><a href="./project-zcyx.html">查看该项目拓扑页</a></p>
+    </section>
+
+    <section class="project-showcase card">
+      <h2>Alpaca-Link</h2>
+      <ul class="meta-list">
+        <li><strong>具体业务内容</strong>物联网设备接入中间层，负责多协议终端会话管理、上行解析、下行投递、第三方接口推送与通信日志追踪</li>
+        <li><strong>技术亮点：</strong>基于会话步骤流组织协议处理逻辑，协议层与主机层解耦<br>
+          <span class="pill">TCP/Socket</span><span class="pill">Protocol Engine</span><span class="pill">Gateway Service</span><span class="pill">Async Processing</span><span class="pill">Third-party Integration</span></li>
+      </ul>
+
+      <div class="code-block" data-scale="1">
+        <div class="code-head">
+          <span>完整方法：GPRSProtol.GetReturnDataAsync(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public async Task&lt;Tuple&lt;string,bool&gt;&gt; GetReturnDataAsync(string data, string stepFinish)
+{
+    switch (stepFinish)
+    {
+        case "HandshakeACK":
+            GPRSAddress = new string(data.Skip(HEADLEN).Skip(DEVICETYPELEN).Take(ADDRESSLEN).ToArray());
+            ValidateGPRSIfRegisted();
+            appClient = gprsService.GetAppClientByAddress(GPRSAddress);
+            gprsService.GetDownLinksByAddress(GPRSAddress).ForEach(x =&gt; downLinkQueue.Enqueue(x));
+            SaveGPRSInfo(data);
+            return new Tuple&lt;string,bool&gt;(CreateTimingPack(),true);
+        case "Time-synACK":
+            return new Tuple&lt;string, bool&gt;(CreateGPRSPack(),true);
+        case "ReadingACK":
+            var unPackData = UnPackExtractData(data);
+            await ThirdPartyService(unPackData);
+            if(downLinkQueue.Any())
+            {
+                downLinkQueue.TryDequeue(out GPRSDownLink downLink);
+                gprsService.DeleteDownLink(downLink.DownlinkMsgId);
+                return new Tuple&lt;string, bool&gt;(CreateGPRSPack(downLink.DownLinkMsg),false);
+            }
+            return new Tuple&lt;string, bool&gt;(CreateClosePack(),true);
+        case "CloseACK":
+            return new Tuple&lt;string, bool&gt;("Quit",true);
+        default:
+            return null;
+    }
+}</code></pre>
+      </div>
+      </div>
+
+      <div class="code-block" data-scale="1" data-level="secondary">
+        <div class="code-head">
+          <span>完整方法：GPRSProtol.CreateGPRSPack(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>private string CreateGPRSPack(string rawData = null)
+{
+    var packTemplate = "7E60AAAAAAAAAAAAAA00F0000030";
+    var payloadTemplate = "00000001000000000000226816200002FE0400001E0000000000810000000010";
+
+    string cj188;
+    if (rawData is null)
+    {
+        var cj188WaitForVerfier = $"6810{GPRSAddress.LSBReverse()}0103901F00";
+        int cj188sum = 0;
+        for (int i = 0; i &lt; cj188WaitForVerfier.Length; i += 2)
+        {
+            cj188sum += int.Parse(cj188WaitForVerfier.Substring(i, 2), System.Globalization.NumberStyles.HexNumber);
+        }
+        var cj188Sum = Convert.ToString(cj188sum, 16).ToUpper();
+        cj188Sum = cj188Sum.Length &lt;= 2 ? cj188Sum.PadLeft(2, '0') : cj188Sum.Substring(cj188Sum.Length - 2, 2);
+        cj188 = $"{cj188WaitForVerfier}{cj188Sum}16";
+    }
+    else
+    {
+        cj188 = rawData;
+    }
+    var waitForVerfier = $"{packTemplate}{payloadTemplate}{cj188}";
+    int sum = 0;
+    for (int i = 0; i &lt; waitForVerfier.Length; i += 2)
+    {
+        sum += int.Parse(waitForVerfier.Substring(i, 2), System.Globalization.NumberStyles.HexNumber);
+    }
+    var atSum = Convert.ToString(sum, 16).ToUpper();
+    atSum = atSum.Length &lt;= 4 ? atSum.PadLeft(4, '0') : atSum.Substring(atSum.Length - 4, 4);
+
+    return $"{waitForVerfier}{atSum}16";
+}</code></pre>
+      </div>
+      </div>
+      <p class="jump-link"><a href="./project-alpaca.html">查看该项目拓扑页</a></p>
+    </section>
+
+    <section class="project-showcase card">
+      <h2>BoveMES</h2>
+      <ul class="meta-list">
+        <li><strong>具体业务内容</strong>产线质检桌面工具，负责批量指令下发、串口采集、设备标识解析、测试规则校验、结果入库与追溯报表输出</li>
+        <li><strong>技术亮点：</strong>HandlerProvider + ResolverFactory + VerifyFactory 形成协议执行与校验闭环<br>
+          <span class="pill">Windows Forms</span><span class="pill">Strategy Pattern</span><span class="pill">Factory Pattern</span><span class="pill">Serial Port I/O</span><span class="pill">QC Traceability</span></li>
+      </ul>
+
+      <div class="code-block" data-scale="1">
+        <div class="code-head">
+          <span>完整方法：Frm_Test.AutoSendCommond(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>private bool AutoSendCommond(IEnumerable&lt;InstructSetDTO&gt; instructList, Dictionary&lt;string, string&gt; resultDic)
+{
+    foreach(var item in instructList)
+    {
+        var protocolHandler = HandlerProvider.GetProtocolHandler(controller, item.ProtocolId ?? 0);
+        var result = protocolHandler.SetInstruct(item);
+        if (result is null || result.Contains("ERROR"))
+        {
+            MessageBox.Show($"{item.InstructName ?? item.InstructContent}:指令出错");
+            return false;
+        }
+        result = protocolHandler.FilterATRecived(result);
+        var dicPair = protocolHandler.RecordResult(item, result);
+
+        receivetbx.Text += $"{dicPair.Key}:{dicPair.Value}  \\r\\n";
+
+        resultDic.Add(dicPair.Key, dicPair.Value);
+    }
+    receivetbx.Text += $"--------------------finish----------------------- \\r\\n";
+    return true;
+}</code></pre>
+      </div>
+      </div>
+
+      <div class="code-block" data-scale="1" data-level="secondary">
+        <div class="code-head">
+          <span>完整方法：ATHandler.GetAtString(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public virtual string GetAtString(string hexStr)
+{
+    var hexArr = hexStr.Split('-').ToList();
+    int countFe = 0;
+    for (int i = 0; i &lt; hexArr.Count; i++)
+    {
+        if (hexArr[i].ToUpper() != "FE")
+        {
+            countFe = i + 1;
+            break;
+        }
+    }
+    if (hexArr.Contains("68") &amp;&amp; hexArr.Contains("16") &amp;&amp; hexArr.Last().Equals("16") &amp;&amp; hexArr.Count &gt; countFe + 12)
+    {
+        int startDataIndex = hexArr.IndexOf("68") + 10;
+        var dataLen = int.Parse(hexArr[startDataIndex], System.Globalization.NumberStyles.HexNumber);
+        var lastIndexStopBit = dataLen + startDataIndex + 3;
+        if (lastIndexStopBit &gt; hexArr.Count) return null;
+
+        if (hexArr.Count &lt; startDataIndex + 1) return null;
+        int dataLength = Convert.ToInt32(hexArr[startDataIndex], 16);
+        if (hexArr.Count &lt; startDataIndex + dataLength + 1) return null;
+        var atStr = "";
+        bool start = false;
+
+        var fixBit = 0;
+        if (hexArr[hexArr.Count - 3].ToUpper().Equals("0D"))
+        {
+            fixBit = 1;
+        }
+
+        var endIndex = startDataIndex + dataLength + fixBit;
+        for (int i = 0; i &lt; endIndex; i++)
+        {
+            if (hexArr[i] == "68")
+            {
+                start = true;
+                i += 13;
+                continue;
+            }
+            if (start)
+            {
+                atStr = string.IsNullOrEmpty(atStr) ? hexArr[i] : $"{atStr}-{hexArr[i]}";
+            }
+        }
+        return IController.Hex2String(atStr);
+    }
+    return null;
+}</code></pre>
+      </div>
+      </div>
+      <p class="jump-link"><a href="./project-bovemes.html">查看该项目拓扑页</a></p>
+    </section>
+
+    <section class="project-showcase card">
+      <h2>CityBound</h2>
+      <ul class="meta-list">
+        <li><strong>具体业务内容</strong>地信确权与边界成果系统，覆盖项目创建、边界点位处理、地物关系识别、成果核验、文档输出与过程数据追溯</li>
+        <li><strong>技术亮点：</strong>将 WinForms 业务流程、GIS 计算工具链和 EF6 数据层分离，通用仓储 + 领域服务支撑可复用作业流水线<br>
+          <span class="pill">WinForms</span><span class="pill">GIS Toolchain</span><span class="pill">EF6</span><span class="pill">Repository Pattern</span><span class="pill">Strategy Context</span></li>
+      </ul>
+
+      <div class="code-block" data-scale="1">
+        <div class="code-head">
+          <span>完整类：Repository&lt;T&gt;</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public class Repository&lt;T&gt; : IRepository&lt;T&gt; where T : class
+{
+    protected readonly DbContext _dbContext;
+    public Repository(ProjectContext context)
+    {
+        _dbContext = context;
+    }
+    public void Add(T entity)
+    {
+        _dbContext.Set&lt;T&gt;().Add(entity);
+        _dbContext.SaveChanges();
+    }
+    public void BatchAdd(IEnumerable&lt;T&gt; entities)
+    {
+        _dbContext.Set&lt;T&gt;().AddRange(entities);
+        _dbContext.SaveChanges();
+    }
+    public void Delete(T entity)
+    {
+        _dbContext.Set&lt;T&gt;().Remove(entity);
+        _dbContext.SaveChanges();
+    }
+    public IQueryable&lt;T&gt; GetAll()
+    {
+        return _dbContext.Set&lt;T&gt;();
+    }
+    public T GetById(string id)
+    {
+        return _dbContext.Set&lt;T&gt;().Find(id);
+    }
+    public void Update(T entity)
+    {
+        _dbContext.Entry(entity).State = EntityState.Modified;
+        _dbContext.SaveChanges();
+    }
+    public void BatchInsert(IEnumerable&lt;T&gt; entities)
+    {
+
+    }
+    public void DeleteAll()
+    {
+        var AllEntity = _dbContext.Set&lt;T&gt;();
+        _dbContext.Set&lt;T&gt;().RemoveRange(AllEntity);
+        _dbContext.SaveChanges();
+    }
+    public void BatchDelete(IEnumerable&lt;T&gt; entities)
+    {
+        _dbContext.Set&lt;T&gt;().RemoveRange(entities);
+        _dbContext.SaveChanges();
+    }
+}</code></pre>
+      </div>
+      </div>
+
+      <div class="code-block" data-scale="1" data-level="secondary">
+        <div class="code-head">
+          <span>完整方法：PointCadastreMemService.GetPointsWithLandCode(...)</span>
+          <div class="code-tools">
+            <button class="code-btn" data-action="toggle">收起</button>
+            <button class="code-btn" data-action="minus">A-</button>
+            <span class="code-scale">100%</span>
+            <button class="code-btn" data-action="plus">A+</button>
+            <button class="code-btn" data-action="reset">重置</button>
+          </div>
+        </div>
+        <div class="code-body">
+        <pre><code>public List&lt;PointCadastreMem&gt; GetPointsWithLandCode(string landCode)
+{
+    var caches = from a in pointRepository.GetAll()
+                 join b in mentionRepository.GetAll()
+                 on a.Id equals b.PointCadastreMemId
+                 where b.LandCode == landCode
+                 select a;
+    return caches.Include(x=&gt;x.Mentions).ToList();
+}</code></pre>
+      </div>
+      </div>
+      <p class="jump-link"><a href="./project-citybound.html">查看该项目拓扑页</a></p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const MIN = 0.7;
+      const MAX = 1.8;
+      const STEP = 0.1;
+
+      const blocks = document.querySelectorAll('.code-block');
+      const showKeyBtn = document.getElementById('show-key-btn');
+      const showAllBtn = document.getElementById('show-all-btn');
+      blocks.forEach(block => {
+        let scale = Number(block.dataset.scale || 1);
+        const label = block.querySelector('.code-scale');
+        const toggleBtn = block.querySelector('[data-action="toggle"]');
+        const setScale = (next) => {
+          scale = Math.max(MIN, Math.min(MAX, Math.round(next * 10) / 10));
+          block.style.setProperty('--code-scale', scale);
+          block.dataset.scale = String(scale);
+          if (label) label.textContent = `${Math.round(scale * 100)}%`;
+        };
+        const setCollapsed = (collapsed) => {
+          block.classList.toggle('is-collapsed', collapsed);
+          if (toggleBtn) toggleBtn.textContent = collapsed ? '展开' : '收起';
+        };
+        setScale(scale);
+        setCollapsed(true);
+
+        block.querySelectorAll('.code-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const action = btn.dataset.action;
+            if (action === 'plus') setScale(scale + STEP);
+            if (action === 'minus') setScale(scale - STEP);
+            if (action === 'reset') setScale(1);
+            if (action === 'toggle') setCollapsed(!block.classList.contains('is-collapsed'));
+          });
+        });
+      });
+
+      if (showKeyBtn) {
+        showKeyBtn.addEventListener('click', () => {
+          blocks.forEach(block => {
+            const isSecondary = block.dataset.level === 'secondary';
+            block.classList.toggle('is-collapsed', isSecondary);
+            const toggleBtn = block.querySelector('[data-action="toggle"]');
+            if (toggleBtn) toggleBtn.textContent = isSecondary ? '展开' : '收起';
+          });
+        });
+      }
+
+      if (showAllBtn) {
+        showAllBtn.addEventListener('click', () => {
+          blocks.forEach(block => {
+            block.classList.remove('is-collapsed');
+            const toggleBtn = block.querySelector('[data-action="toggle"]');
+            if (toggleBtn) toggleBtn.textContent = '收起';
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

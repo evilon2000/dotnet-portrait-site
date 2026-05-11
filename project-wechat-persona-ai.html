@@ -1,0 +1,113 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wechat Persona Agent 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-wechat-persona-ai.html">Persona Agent</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Wechat Persona Agent Blueprint</h1>
+      <p>AI 画像产品化工程，包含后端 API、Prompt 资产、模型接入与多端协作路径，作为跨栈能力补充展示</p>
+      <span class="pill">FastAPI</span><span class="pill">PromptOps</span><span class="pill">LLM Gateway</span><span class="pill">codex</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1320 500" role="img" aria-label="Persona Agent 架构拓扑图">
+          <defs>
+            <pattern id="grid4" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M24 0 L0 0 0 24" fill="none" stroke="#2b5b80" stroke-width="0.55" opacity="0.32"/>
+            </pattern>
+            <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#77d9ff"/>
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1320" height="500" fill="url(#grid4)"/>
+          <rect class="arch-panel" x="24" y="24" width="1272" height="452"/>
+          <rect class="arch-node arch-node-io" x="80" y="90" rx="10" ry="10" width="300" height="86"/>
+          <text class="arch-title" x="230" y="124" text-anchor="middle">Multi-end Clients</text>
+          <text class="arch-text" x="230" y="148" text-anchor="middle">Web / Mobile / Admin</text>
+          <rect class="arch-node arch-node-core" x="430" y="90" rx="10" ry="10" width="320" height="86"/>
+          <text class="arch-title" x="590" y="124" text-anchor="middle">FastAPI Backend</text>
+          <text class="arch-text" x="590" y="148" text-anchor="middle">Router / Service / Schema</text>
+          <rect class="arch-node arch-node-biz" x="800" y="90" rx="10" ry="10" width="440" height="86"/>
+          <text class="arch-title" x="1020" y="124" text-anchor="middle">LLM &amp; Prompt Layer</text>
+          <text class="arch-text" x="1020" y="148" text-anchor="middle">Bailian Client / Prompt Assets</text>
+          <rect class="arch-node arch-node-infra" x="320" y="290" rx="10" ry="10" width="360" height="86"/>
+          <text class="arch-title" x="500" y="324" text-anchor="middle">Data Layer</text>
+          <text class="arch-text" x="500" y="348" text-anchor="middle">PostgreSQL + pgvector / Redis</text>
+          <rect class="arch-node arch-node-core" x="760" y="290" rx="10" ry="10" width="460" height="86"/>
+          <text class="arch-title" x="990" y="324" text-anchor="middle">Runtime Governance</text>
+          <text class="arch-text" x="990" y="348" text-anchor="middle">Timeout / Error Mapping / Health</text>
+          <path class="arch-line" d="M380 132 L430 132" marker-end="url(#arr4)"/>
+          <path class="arch-line" d="M750 132 L800 132" marker-end="url(#arr4)"/>
+          <path class="arch-line" d="M590 176 L500 290" marker-end="url(#arr4)"/>
+          <path class="arch-line" d="M1020 176 L990 290" marker-end="url(#arr4)"/>
+          <path class="arch-line" d="M680 334 L760 334" marker-end="url(#arr4)"/>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务内容</h3>
+          <p class="muted">基于用户输入与历史素材构建“画像解释—洞察问答—内容生成”链路，服务内容创作和个性化输出场景</p>
+        </article>
+        <article class="card span-6">
+          <h3>技术亮点</h3>
+          <p class="muted">模型网关封装、错误类型标准化、JSON 输出约束与 Prompt 资产化，提升线上可维护性</p>
+          <span class="pill">LLM Gateway</span><span class="pill">Prompt Assets</span><span class="pill">Error Handling</span><span class="pill">codex</span>
+        </article>
+        <article class="card span-12">
+          <h3>完整代码示例：BailianClient.chat_json</h3>
+<pre><code>def chat_json(
+    self, *, model: str, messages: list[dict[str, Any]], **kwargs: Any
+) -&gt; dict[str, Any]:
+    result = self.chat_completions(model=model, messages=messages, **kwargs)
+    try:
+        content = result["choices"][0]["message"]["content"]
+    except (KeyError, IndexError, TypeError) as exc:
+        raise BailianResponseError("Bailian response schema is missing message content.") from exc
+
+    if not isinstance(content, str):
+        raise BailianResponseError("Bailian message content is not a text JSON payload.")
+
+    try:
+        return json.loads(_strip_json_fence(content))
+    except json.JSONDecodeError as exc:
+        raise BailianResponseError(
+            "Bailian returned non-JSON content for a JSON extraction task."
+        ) from exc</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
