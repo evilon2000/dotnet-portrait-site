@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modbus 工业仿真套件 项目</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title">.NET 架构与工程作品集</div>
+      <nav class="nav">
+        <a href="./index.html">主页</a>
+        <a href="./projects.html">项目总览</a>
+        <a href="./architecture.html">业务与代码亮点</a>
+        <a class="active" href="./project-modbus-suite.html">Modbus 套件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Modbus 工业仿真套件</h1>
+      <p>覆盖 Modbus 主站采集、PLC/机器人仿真、Twin 事件适配，服务现场联调与协议排障</p>
+      <span class="pill">.NET 9</span><span class="pill">WPF</span><span class="pill">NModbus</span><span class="pill">codex</span>
+    </section>
+
+    <section>
+      <h2>架构拓扑</h2>
+      <div class="arch-wrap">
+        <svg class="arch-svg" viewBox="0 0 1320 500" role="img" aria-label="Modbus 套件架构拓扑图">
+          <defs>
+            <pattern id="grid3" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M24 0 L0 0 0 24" fill="none" stroke="#2b5b80" stroke-width="0.55" opacity="0.32"/>
+            </pattern>
+            <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#77d9ff"/>
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1320" height="500" fill="url(#grid3)"/>
+          <rect class="arch-panel" x="24" y="24" width="1272" height="452"/>
+          <rect class="arch-node arch-node-io" x="80" y="90" rx="10" ry="10" width="320" height="86"/>
+          <text class="arch-title" x="240" y="124" text-anchor="middle">ModbusMaster UI</text>
+          <text class="arch-text" x="240" y="148" text-anchor="middle">Connection / Poll Plan / Snapshot</text>
+          <rect class="arch-node arch-node-core" x="450" y="90" rx="10" ry="10" width="320" height="86"/>
+          <text class="arch-title" x="610" y="124" text-anchor="middle">Client Service</text>
+          <text class="arch-text" x="610" y="148" text-anchor="middle">TCP / RTU / RTU Debug Stream</text>
+          <rect class="arch-node arch-node-biz" x="820" y="90" rx="10" ry="10" width="420" height="86"/>
+          <text class="arch-title" x="1030" y="124" text-anchor="middle">Simulator Cluster</text>
+          <text class="arch-text" x="1030" y="148" text-anchor="middle">PLC Simulator / Robot Twin Adapter</text>
+          <rect class="arch-node arch-node-infra" x="280" y="290" rx="10" ry="10" width="410" height="86"/>
+          <text class="arch-title" x="485" y="324" text-anchor="middle">Protocol Data Model</text>
+          <text class="arch-text" x="485" y="348" text-anchor="middle">ReadBlock / Snapshot / PointSample</text>
+          <rect class="arch-node arch-node-core" x="760" y="290" rx="10" ry="10" width="460" height="86"/>
+          <text class="arch-title" x="990" y="324" text-anchor="middle">Industrial Link</text>
+          <text class="arch-text" x="990" y="348" text-anchor="middle">Register Map / Twin Event / Smoke Test</text>
+          <path class="arch-line" d="M400 132 L450 132" marker-end="url(#arr3)"/>
+          <path class="arch-line" d="M770 132 L820 132" marker-end="url(#arr3)"/>
+          <path class="arch-line" d="M610 176 L500 290" marker-end="url(#arr3)"/>
+          <path class="arch-line" d="M1030 176 L990 290" marker-end="url(#arr3)"/>
+          <path class="arch-line" d="M690 334 L760 334" marker-end="url(#arr3)"/>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>项目介绍</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>业务内容</h3>
+          <p class="muted">用于设备调试和协议联调，支持主站采样、仿真端出数、双向事件桥接，缩短现场问题定位时间</p>
+        </article>
+        <article class="card span-6">
+          <h3>技术亮点</h3>
+          <p class="muted">统一连接抽象 + 多传输模式 + 采样快照模型，支持 TCP/RTU 并可扩展到 Twin 事件流</p>
+          <span class="pill">Protocol Adapter</span><span class="pill">Snapshot Model</span><span class="pill">WPF MVVM</span><span class="pill">codex</span>
+        </article>
+        <article class="card span-12">
+          <h3>完整代码示例：ModbusClientService.ConnectAsync</h3>
+<pre><code>public async Task ConnectAsync(ModbusConnectionOptions options, CancellationToken cancellationToken = default)
+{
+    await _gate.WaitAsync(cancellationToken);
+    try
+    {
+        DisconnectCore();
+
+        switch (options.Mode)
+        {
+            case ConnectionMode.Tcp:
+            {
+                var tcpClient = new TcpClient();
+                await tcpClient.ConnectAsync(options.Host, options.Port, cancellationToken);
+                tcpClient.ReceiveTimeout = options.TimeoutMilliseconds;
+                tcpClient.SendTimeout = options.TimeoutMilliseconds;
+
+                _connectionResource = tcpClient;
+                _master = _factory.CreateMaster(tcpClient);
+                break;
+            }
+            case ConnectionMode.Rtu:
+            {
+                var serialPort = new SerialPort(
+                    options.SerialPortName,
+                    options.BaudRate,
+                    options.Parity,
+                    options.DataBits,
+                    options.StopBits)
+                {
+                    ReadTimeout = options.TimeoutMilliseconds,
+                    WriteTimeout = options.TimeoutMilliseconds
+                };
+
+                serialPort.Open();
+                var serialResource = new SerialPortStreamResource(serialPort);
+                _connectionResource = serialResource;
+                _master = _factory.CreateRtuMaster(serialResource);
+                break;
+            }
+            case ConnectionMode.RtuDebugStream:
+            {
+                var tcpClient = new TcpClient();
+                await tcpClient.ConnectAsync(options.Host, options.Port, cancellationToken);
+                tcpClient.ReceiveTimeout = options.TimeoutMilliseconds;
+                tcpClient.SendTimeout = options.TimeoutMilliseconds;
+
+                var networkResource = new NetworkStreamResource(tcpClient);
+                _connectionResource = networkResource;
+                _master = _factory.CreateRtuMaster(networkResource);
+                break;
+            }
+            default:
+                throw new NotSupportedException($"Unsupported connection mode: {options.Mode}");
+        }
+
+        _unitId = options.UnitId;
+        _master.Transport.ReadTimeout = options.TimeoutMilliseconds;
+        _master.Transport.WriteTimeout = options.TimeoutMilliseconds;
+        _master.Transport.Retries = 0;
+    }
+    catch
+    {
+        DisconnectCore();
+        throw;
+    }
+    finally
+    {
+        _gate.Release();
+    }
+}</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
